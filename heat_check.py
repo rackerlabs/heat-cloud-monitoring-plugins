@@ -88,6 +88,9 @@ def main():
                         )
     parser.add_argument('-U', '--heat_url', help='URL for Heat service')
     parser.add_argument('-r', '--region', help='Region for service catalog')
+    parser.add_argument('-T', '--template', choices=['wp_single', 'wp_multi',
+                        'django_clouddb'], default='wp_single',
+                        help='Template for stack preview')
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-b', '--basic', action='store_false', help='Runs '
@@ -122,22 +125,22 @@ def main():
                       region)
 
     if args.preview:
-        preview_times = {}
         preview_templates = {
             'wp_single': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/wordpress-single/master/wordpress-single.yaml',
             'wp_multi': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/wordpress-multi/master/wordpress-multi-server.yaml',
             'django_clouddb': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/django-clouddb/master/django-multi.yaml'
         }
 
-        for stack, url in preview_templates.iteritems():
-            if stack == 'django_clouddb':
-                preview_times[stack] = check.stack_preview_time(url,
-                                        parameters={'datastore_version': '5.1'})
-            else:
-                preview_times[stack] = check.stack_preview_time(url)
+        template = args.template
+        url = preview_templates[template]
 
-        for stack, time in preview_times.iteritems():
-            print('metric preview_{} float {}'.format(stack, time))
+        if template == 'django_clouddb':
+            preview_time = check.stack_preview_time(url,
+                                                    parameters={'datastore_version': '5.1'})
+        else:
+            preview_time = check.stack_preview_time(url)
+
+        print('metric preview_{} float {}'.format(template, preview_time))
     else:
         bi_time = check.build_info_time()
         sl_time = check.stack_list_time()
