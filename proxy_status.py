@@ -6,7 +6,7 @@ import socket
 import sys
 
 
-DEFAULT_SOCKET = '/tmp/haproxy'
+DEFAULT_SOCKET = '/var/lib/haproxy/stats'
 RECV_SIZE = 1024
 
 class HAProxySocket(object):
@@ -56,7 +56,7 @@ class HAProxySocket(object):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('proxy', help='Name of the proxy that should be checked')
-    parser.add_argument('-s', '--socket', default='/tmp/haproxy', help='Path to HAProxy stats socket')
+    parser.add_argument('-s', '--socket', default='/var/lib/haproxy/stats', help='Path to HAProxy stats socket')
     args = parser.parse_args()
 
     proxy_name = args.proxy
@@ -80,7 +80,6 @@ def main():
             nodes_down += 1
         sessions += int(node['scur'])
 
-    print("status success")
     print("metric nodes_up int %i" % nodes_up)
     print("metric nodes_down int %i" % nodes_down)
     print("metric sessions int %i" % sessions)
