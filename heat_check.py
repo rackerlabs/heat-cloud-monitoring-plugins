@@ -89,7 +89,7 @@ def main():
     parser.add_argument('-U', '--heat_url', help='URL for Heat service')
     parser.add_argument('-r', '--region', help='Region for service catalog')
     parser.add_argument('-T', '--template', choices=['wp_single',
-                        'php_app_multi', 'django_clouddb'],
+                        'php_app_multi', 'django_clouddb', 'php-small'],
                         default='wp_single', help='Template for stack preview')
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -128,6 +128,7 @@ def main():
         preview_templates = {
             'wp_single': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/wordpress-single/master/wordpress-single.yaml',
             'php_app_multi': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/php-app-multi/master/php-app-multi.yaml',
+            'php-small': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/php-small/master/php-small.yaml',
             'django_clouddb': 'https://raw.githubusercontent.com/rackspace-orchestration-templates/django-clouddb/master/django-multi.yaml'
         }
 
